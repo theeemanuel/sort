@@ -1,3 +1,3 @@
 # Sorting-Algorithms
-Visualise different sorting algorithms.
+Visualise different Sorting Algorithms.
 Vary sorting speeds with mentioned instructions.
