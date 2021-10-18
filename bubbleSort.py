@@ -12,15 +12,19 @@ win = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("BUBBLE SORT")
 font = pygame.font.SysFont("comicsans", 24)
 
-def draw(mat, index, marker, swapColor):
+def draw(mat, index, marker, swapColor, rep, line):
     for i in range(index):
-        #pygame.draw.circle(win, (255,255,255), ((t*i), mat[i]), (t/2))
-        #pygame.draw.circle(win, swapColor, ((t*marker), mat[marker]), (t/2))
-        #pygame.draw.circle(win, swapColor, ((t*(marker+1)), mat[marker+1]), (t/2))
+        if rep == 0:
+            pygame.draw.circle(win, (255,255,255), ((t*i), mat[i]), (t/2))
+        elif rep == 1:
+            pygame.draw.rect(win, (255,255,255), ((t*i),0,t,mat[i]))
 
-        pygame.draw.rect(win, (255,255,255), ((t*i),0,t,mat[i]))
-        pygame.draw.rect(win, swapColor, ((t*marker),0,t,mat[marker]))
-        pygame.draw.rect(win, swapColor, ((t*(marker+1)),0,t,mat[marker+1]))
+        if line == 0:
+            pygame.draw.circle(win, swapColor, ((t*marker), mat[marker]), (t/2))
+            pygame.draw.circle(win, swapColor, ((t*(marker+1)), mat[marker+1]), (t/2))
+        elif line == 1:
+            pygame.draw.rect(win, swapColor, ((t*marker),0,t,mat[marker]))
+            pygame.draw.rect(win, swapColor, ((t*(marker+1)),0,t,mat[marker+1]))
 
 def play(mat, index, run):
 
@@ -28,6 +32,10 @@ def play(mat, index, run):
     swaps = 0
     FPS = 60
     pause = False
+    rep = 1
+    signM = -1
+    line = 1
+    signL = -1
 
     while run:
 
@@ -46,6 +54,12 @@ def play(mat, index, run):
                     FPS += 2
                 elif speedInp[pygame.K_DOWN]:
                     pause = True
+                elif speedInp[pygame.K_s]:
+                    rep = rep + (signM)
+                    signM = -signM
+                elif speedInp[pygame.K_m]:
+                    line = line + (signL)
+                    signL = -signL
 
                 while pause:
 
@@ -71,26 +85,28 @@ def play(mat, index, run):
                     mat[j+1] = temp
 
                 win.fill((0,0,0))
-                draw(mat, index, j, swapColor)
+                draw(mat, index, j, swapColor, rep, line)
                 text1 = font.render("ITERATIONS: "+str(iterations), True, (255,255,255))
                 text2 = font.render("SWAPS: "+str(swaps), True, (255,255,255))
                 text3 = font.render("LEFT: reduces F.P.S.  |   RIGHT: increases F.P.S.   |   DOWN: pauses   |   UP: unpauses", True, (255,255,255))
-                text4 = font.render(str(round(percent, 1)), True, (255,255,255))
-                text5 = font.render("% sorted", True, (255,255,255))
+                text4 = font.render("s: Swaps between line and circle representation  |   m: Shows and removes marker line    ", True, (255,255,255))
+                text5 = font.render(str(round(percent, 1)), True, (255,255,255))
+                text6 = font.render("% sorted", True, (255,255,255))
                 
-                win.blit(text1,(100, 350))
-                win.blit(text2,(400, 350))
-                win.blit(text3,(100, 370))
-                win.blit(text4,(700, 350))
-                win.blit(text5,(745, 350))
+                win.blit(text1,(100, 330))
+                win.blit(text2,(400, 330))
+                win.blit(text3,(100, 350))
+                win.blit(text4,(100, 370))
+                win.blit(text5,(700, 330))
+                win.blit(text6,(745, 330))
                 pygame.display.update()
             
         win.fill((0,0,0))
-        draw(mat, index, -2, (0, 255, 0))
+        draw(mat, index, -2, (0, 255, 0), rep, line)
         win.blit(text1,(100, 350))
         win.blit(text2,(300, 350))
-        win.blit(text4,(700, 350))
-        win.blit(text5,(745, 350))
+        win.blit(text5,(700, 350))
+        win.blit(text6,(745, 350))
         endtext = font.render("PRESS 'SPACE' TO RESTART", True, (255,255,255))
         win.blit(endtext, (100, 370))
         pygame.display.update()
@@ -113,7 +129,7 @@ def main():
             run = True
             start = False
         else:
-            draw(a, N, -2, (0, 255, 0))
+            draw(a, N, -2, (0, 255, 0), 1, 1)
             starttext = font.render("PRESS 'SPACE' TO START", True, (255,255,255))
             win.blit(starttext, (100, 350))
 
