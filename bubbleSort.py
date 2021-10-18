@@ -33,9 +33,11 @@ def play(mat, index, run):
     FPS = 60
     pause = False
     rep = 1
-    signM = -1
+    signR = -1
     line = 1
     signL = -1
+    sound = 0
+    signS = 1
 
     while run:
 
@@ -54,12 +56,15 @@ def play(mat, index, run):
                     FPS += 2
                 elif speedInp[pygame.K_DOWN]:
                     pause = True
-                elif speedInp[pygame.K_s]:
-                    rep = rep + (signM)
-                    signM = -signM
+                elif speedInp[pygame.K_r]:
+                    rep = rep + (signR)
+                    signR = -signR
                 elif speedInp[pygame.K_m]:
                     line = line + (signL)
                     signL = -signL
+                elif speedInp[pygame.K_s]:
+                    sound = sound + (signS)
+                    signS = -signS
 
                 while pause:
 
@@ -77,9 +82,12 @@ def play(mat, index, run):
                 if mat[j] > mat[j+1]:
                     swapColor = (255, 0, 0)
                     swaps += 1
-                    swapsound = pygame.mixer.Sound('sounds/swap.wav')
-                    pygame.mixer.Sound.play(swapsound)
-                    pygame.mixer.music.stop()
+    
+                    if sound == 1:
+                        swapsound = pygame.mixer.Sound('sounds/swap.wav')
+                        pygame.mixer.Sound.play(swapsound)
+                        pygame.mixer.music.stop()
+                        
                     temp = mat[j]
                     mat[j] = mat[j+1]
                     mat[j+1] = temp
@@ -89,7 +97,7 @@ def play(mat, index, run):
                 text1 = font.render("ITERATIONS: "+str(iterations), True, (255,255,255))
                 text2 = font.render("SWAPS: "+str(swaps), True, (255,255,255))
                 text3 = font.render("LEFT: reduces F.P.S.  |   RIGHT: increases F.P.S.   |   DOWN: pauses   |   UP: unpauses", True, (255,255,255))
-                text4 = font.render("s: Swaps between line and circle representation  |   m: Shows and removes marker line    ", True, (255,255,255))
+                text4 = font.render("r: Swaps between line and circle representation  |   m: Shows and removes marker line                |   s: Sound on/off   |", True, (255,255,255))
                 text5 = font.render(str(round(percent, 1)), True, (255,255,255))
                 text6 = font.render("% sorted", True, (255,255,255))
                 
